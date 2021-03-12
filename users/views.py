@@ -36,6 +36,19 @@ class ReadUpdateDelete(APIView):
         data = UserSerializer(user).data
         return Response(data, status.HTTP_200_OK)
 
+    def patch(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        instance = get_object_or_404(UserModel, pk=pk)
+        serializer = UserSerializer(instance, self.request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    def delete(self, *args, **kwargs):
+        pk = kwargs.get('pk')
+        instance = get_object_or_404(UserModel, pk=pk)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # class UserView(APIView):
 
